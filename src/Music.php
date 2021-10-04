@@ -23,10 +23,16 @@ class Music
 
         $crawler = $client->request('GET', $url);
 
-        $musics = $crawler->filter('td.chart-table-track')->each(function ($node) {
-            return $node->text();
+        $musics = $crawler->filter('td.chart-table-track strong')->each(function ($musics) {
+            return $musics->text();
         });
 
-        print_r($musics);
+        $artists = $crawler->filter('td.chart-table-track span')->each(function ($artists) {
+            return substr($artists->text(), 3);
+        });
+
+        $musicList = array_combine($artists, $musics);
+
+        return $musicList;
     }
 }
